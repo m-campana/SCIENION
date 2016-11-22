@@ -1,0 +1,56 @@
+Error:
+
+run-time error : Wait for device "xAxis" timed out after 5000ms
+
+
+Solution:
+
+Testing script:
+
+package org.micromanager.IRISSpotCheckPlugin;
+
+import mmcorej.CMMCore;
+import mmcorej.StrVector;
+import mmcorej.TaggedImage;
+
+import org.micromanager.api.Autofocus;
+import org.micromanager.api.MMPlugin;
+import org.micromanager.api.ScriptInterface;
+import org.micromanager.utils.MMException;
+import org.micromanager.utils.MMScriptException;
+
+// fourColor 
+import ij.*;
+
+xStartPosUm = mmc.getPosition("xAxis");
+gui.message("x start pos: " + xStartPosUm);
+
+yStartPosUm = mmc.getPosition("yAxis");
+gui.message("y start pos: " + yStartPosUm);
+
+ // zStartPosUm = mmc.getPosition("zAxis");
+//gui.message("z start pos: " + zStartPosUm);
+fieldSizemmX = 10;
+fieldSizemmY = 3;
+
+Autofocus af = gui.getAutofocus();
+
+gui.message("top-right");
+mmc.setFocusDevice("xAxis");
+mmc.setPosition(xStartPosUm + 1000.0
+		* (fieldSizemmX));
+mmc.waitForDevice("xAxis");
+mmc.setFocusDevice("yAxis");
+mmc.setPosition(yStartPosUm );
+mmc.waitForDevice("yAxis");
+mmc.setFocusDevice("zAxis");
+af.fullFocus();
+mmc.waitForDevice("zAxis");
+topRightZ = mmc.getPosition("zAxis");
+gui.message(topRightZ);
+
+Need to calculate speed of motors, have system sleep while they are moving and then wait for the device.  This should be done anywhere they are moving for a robust imaging setup. 
+
+
+
+
