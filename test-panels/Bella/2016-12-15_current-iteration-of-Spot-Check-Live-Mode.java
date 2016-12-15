@@ -1,6 +1,5 @@
 /**
  * Written by Bella Campana (start date: 2016-09-12).
- * Saved as TestPanelBC05.jar in C:\Program Files\Micro-Manager-1.4.23\mmplugins\
  * 
  * Modified from micromanager HelloWorld and 
  * ArrayScan plugin written by Derin Sevenler (Unlu lab, BU, 2015)
@@ -11,8 +10,6 @@
  * To create a new one of these, follow instructions at:
  * https://micro-manager.org/wiki/Writing_plugins_for_Micro-Manager
  */
- 
- 
 
 package org.micromanager.testpanelBC05Plugin;
 
@@ -188,23 +185,18 @@ public class testpanelBC05Plugin implements MMPlugin, ActionListener {
 
 		// make and add tip label
 		JPanel scanAreaPanel = new JPanel();
-		scanAreaPanel.add(new JLabel(
-				"Number of time points N*M (enter integers):"));
+		scanAreaPanel.add(new JLabel("Number of time points (enter integer):"));
 		scanAreaPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(scanAreaPanel);
 
 		// nXField, nYField, nAreaXField, nAreaYField
 		nAreaXField = new JTextField("5", 3);
-		nAreaYField = new JTextField("1", 3);
 		// labels
 		JLabel nAreaXLabel = new JLabel("N: ");
-		JLabel nAreaYLabel = new JLabel("     M: ");
 		// put them in their own pane side-by-side
 		JPanel nAreaXYPanel = new JPanel();
 		nAreaXYPanel.add(nAreaXLabel);
 		nAreaXYPanel.add(nAreaXField);
-		nAreaXYPanel.add(nAreaYLabel);
-		nAreaXYPanel.add(nAreaYField);
 		nAreaXYPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel.add(nAreaXYPanel);
 
@@ -313,9 +305,9 @@ public class testpanelBC05Plugin implements MMPlugin, ActionListener {
 			}
 
 			double numX = Double.parseDouble(nXField.getText());
-			double numAreaX = Double.parseDouble(nAreaXField.getText());
 			double numY = Double.parseDouble(nYField.getText());
-			double numAreaY = Double.parseDouble(nAreaYField.getText());
+			double numAreaX = Double.parseDouble(nAreaXField.getText());
+			double numAreaY = 1; // Double.parseDouble(nAreaYField.getText());
 			double exposureTime = Double.parseDouble(nExpTimeField.getText());
 			int numRepeats = Integer.parseInt(nNumRepsField.getText());
 			int numFrames = Integer.parseInt(nNumFramesField.getText());
@@ -662,7 +654,6 @@ public class testpanelBC05Plugin implements MMPlugin, ActionListener {
 					if (blueOnly) {
 						SubstackMaker se = new SubstackMaker();
 						se.makeSubstack(mir, "1");
-						// TODO: make sure this mirror file imports blue only
 					}
 					ImageCalculator ic = new ImageCalculator(); // http://rsb.info.nih.gov/ij/developer/source/ij/plugin/ImageCalculator.java.html
 					ImagePlus normedStack = ic.run(
@@ -672,10 +663,6 @@ public class testpanelBC05Plugin implements MMPlugin, ActionListener {
 					converter.setDoScaling(false);
 					converter.convertToGray16();
 
-					// TODO: figure out the more elegant process later?
-					// ImageProcessor ip = ImageUtils
-					// .makeProcessor(core_, normedStack);
-					// ip.flipHorizontal();
 					IJ.run(normedStack, "Flip Horizontally", "stack");
 					IJ.save(normedStack, saveName);
 
